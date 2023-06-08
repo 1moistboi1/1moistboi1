@@ -1,0 +1,84 @@
+import random
+
+# Player class
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.health = 100
+        self.damage = 20
+
+    def take_damage(self, damage):
+        self.health -= damage
+
+    def is_alive(self):
+        return self.health > 0
+
+    def attack(self):
+        return self.damage
+
+# Enemy class
+class Enemy:
+    def __init__(self, name, health, damage):
+        self.name = name
+        self.health = health
+        self.damage = damage
+
+    def take_damage(self, damage):
+        self.health -= damage
+
+    def is_alive(self):
+        return self.health > 0
+
+    def attack(self):
+        return self.damage
+
+# Game class
+class Game:
+    def __init__(self):
+        self.player = None
+        self.enemy = None
+
+    def start(self):
+        print("Welcome to the Adventure Game!")
+        player_name = input("Enter your name: ")
+        self.player = Player(player_name)
+        self.enemy = Enemy("Dragon", 100, 30)
+        self.play()
+
+    def play(self):
+        print("A wild", self.enemy.name, "appears!")
+
+        while self.player.is_alive() and self.enemy.is_alive():
+            print("\n", self.player.name, "Health:", self.player.health)
+            print(self.enemy.name, "Health:", self.enemy.health)
+            print("1. Attack")
+            print("2. Run")
+            choice = input("Enter your choice: ")
+
+            if choice == "1":
+                player_damage = self.player.attack()
+                self.enemy.take_damage(player_damage)
+                print("You attack the", self.enemy.name, "and deal", player_damage, "damage.")
+
+                enemy_damage = self.enemy.attack()
+                self.player.take_damage(enemy_damage)
+                print("The", self.enemy.name, "attacks you and deals", enemy_damage, "damage.")
+
+            elif choice == "2":
+                print("You run away from the", self.enemy.name)
+                break
+
+        if self.player.is_alive():
+            print("\nCongratulations, you defeated the", self.enemy.name + "!")
+        else:
+            print("\nGame Over. You were defeated by the", self.enemy.name + ".")
+
+        play_again = input("Do you want to play again? (yes/no): ")
+        if play_again.lower() == "yes":
+            self.start()
+        else:
+            print("Thank you for playing!")
+
+# Starting the game
+game = Game()
+game.start()
